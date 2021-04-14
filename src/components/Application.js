@@ -2,6 +2,9 @@ import React from "react";
 import "components/Application.scss";
 import DayList from "../components/DayList.js";
 import { useState } from "react";
+import Button from "components/Button";
+import InterviewerList from "../components/InterviewerList";
+import Appointment from "../components/Appointment";
 
 const days = [
 	{
@@ -21,8 +24,43 @@ const days = [
 	},
 ];
 
+const appointments = [
+	{
+		id: 1,
+		time: "12pm",
+	},
+	{
+		id: 2,
+		time: "1pm",
+		interview: {
+			student: "Lydia Miller-Jones",
+			interviewer: {
+				id: 1,
+				name: "Sylvia Palmer",
+				avatar: "https://i.imgur.com/LpaY82x.png",
+			},
+		},
+	},
+	{
+		id: 3,
+		time: "2pm",
+	},
+	{
+		id: 4,
+		time: "3pm",
+	},
+	{
+		id: 5,
+		time: "5pm",
+	},
+];
+
 export default function Application(props) {
 	const [day, setDay] = useState("Monday");
+	const [interviewer, setInterviewer] = useState(props.preselected);
+	const appointment = appointments.map(appointment => {
+		return <Appointment key={appointment.id} {...appointment} />;
+	});
 
 	return (
 		<main className="layout">
@@ -42,7 +80,14 @@ export default function Application(props) {
 					alt="Lighthouse Labs"
 				/>
 			</section>
-			<section className="schedule"></section>
+			<section className="schedule">
+				{appointment}
+
+				<interviewerList
+					interviewer={interviewer}
+					setInterviewer={setInterviewer}
+				/>
+			</section>
 		</main>
 	);
 }
