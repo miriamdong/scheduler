@@ -4,13 +4,12 @@ export function getAppointmentsForDay(state, day) {
 
 	const filteredDay = state.days.filter(a => a.name === day);
 
-	console.log(filteredDay);
 	const appointmentArray = filteredDay.map(day => day.appointments);
-	console.log(appointmentArray);
+
 	const merged = [].concat.apply([], appointmentArray);
 
 	const appointments = merged.map(id => state.appointments[id]);
-	console.log(appointments);
+
 	return appointments;
 }
 
@@ -20,25 +19,22 @@ export function getInterview(state, interview) {
 
 	const interviewObj = {
 		student: interview.student,
+		interviewer: state.interviewers[interview.interviewer],
 	};
 
-	interviewObj.interviewer = state.interviewers[interview.interviewer];
 	return interviewObj;
 }
 
-// // Gets the interviewers for a given day
-// export function getInterviewersForDay(state, dayName) {
-// 	const filteredDay = state.days.filter(day => day.name === dayName);
+// Gets the interviewers for a given day
+export function getInterviewersForDay(state, day) {
+	if (state.days.length === 0) return [];
+	const dayObj = state.days.find(a => a.name === day);
 
-// 	if (filteredDay.length === 0 || state.days.length === 0) {
-// 		return [];
-// 	}
+	if (!dayObj) return [];
 
-// 	const interviewersArray = filteredDay[0].interviewers;
+	const interviewersArray = dayObj.interviewers;
 
-// 	const foundInterviewers = interviewersArray.map(id => {
-// 		return state.interviewers[id];
-// 	});
+	const interviewers = interviewersArray.map(id => state.interviewers[id]);
 
-// 	return foundInterviewers;
-// }
+	return interviewers;
+}
