@@ -1,45 +1,26 @@
 import axios from "axios";
-import React, { useReducer, useEffect } from "react";
-// import { createReducer } from "@reduxjs/toolkit";
+import { useReducer, useEffect } from "react";
+// import { createStore } from "redux";
+import reducers, {
+	SET_DAY,
+	SET_APPLICATION_DATA,
+	SET_INTERVIEW,
+	ADD,
+	SUBTRACT,
+	SET_APPOINTMENTS,
+} from "./reducers";
+// import useSocket from "hooks/useSocket";
 
 export default function useApplicationData(props) {
-	const SET_DAY = "SET_DAY";
-	const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-	const SET_INTERVIEW = "SET_INTERVIEW";
-
-	function reducer(state, action) {
-		switch (action.type) {
-			case SET_DAY: {
-				return { ...state, day: action.value };
-			}
-			case SET_APPLICATION_DATA: {
-				console.log("action:", action);
-				return {
-					...state,
-					days: action.days.data,
-					interviewers: action.interviewers.data,
-					appointments: action.appointments.data,
-				};
-			}
-
-			case SET_INTERVIEW: {
-				console.log("interview:", action);
-				return { ...state, interview: action.appointments };
-			}
-			default:
-				throw new Error(
-					`Tried to reduce with unsupported action type: ${action.type}`
-				);
-		}
-	}
-
+	// console.log("useApplicationData:", props);
 	// initial state
-	const [state, dispatch] = useReducer(reducer, {
+	const initState = {
 		day: "Monday",
 		days: [],
 		appointments: {},
 		interviewers: {},
-	});
+	};
+	const [state, dispatch] = useReducer(reducers, initState);
 
 	// fetch the inital data
 	const GET_DAYS = axios.get("/api/days");
@@ -59,18 +40,45 @@ export default function useApplicationData(props) {
 		);
 	}, []);
 
-	const setDay = day => dispatch({ type: SET_DAY, day });
-	// const setInterviewer = interviewer =>
-	// 	setState(prev => ({ ...prev, interviewer }));
+	useEffect(() => {
+		const socket = new WebSocket("ws://localhost:8001", "protocolOne");
+		socket.onopen = () => {
+			console.log("Connected");
+		};
+		// socket.send(JSON.stringify("ping"));
 
-	const updateSpots = (day, days, func) => {
+		socket.onmessage = event => {
+			console.log(`Message Received: ${event.data}`);
+			const eventData = JSON.parse(event.data);
+			console.log("event:::", JSON.parse(event.data));
+			// console.log(`Message:${eventData.type}`);
+			if (eventData.type === "SET_INTERVIEW") {
+				// dispatch({ type: SET_INTERVIEW, event: event.interview });
+				console.log("here");
+				dispatch(eventData);
+			}
+		};
+
+		return () => {
+			socket.close();
+		};
+	}, [dispatch]);
+
+	const setDay = day => dispatch({ type: SET_DAY, value: day });
+	// const store = createStore(reducer);
+
+	const reduceSpots = (state, { type, value }) => {
+		return reducers[type](state, value) || state;
+	};
+
+	const updateSpots = (day, days, action) => {
 		const dayObj = days.filter(a => a.name === day)[0];
-		if (func === "book") dayObj.spots -= 1;
-		if (func === "delete") dayObj.spots += 1;
+		if (action === ADD) dayObj.spots -= 1;
+		if (action === SUBTRACT) dayObj.spots += 1;
 	};
 
 	const bookInterview = (id, interview) => {
-		// console.log("id, interview: ", id, interview);
+		console.log("id, interview: ", id, interview);
 		const appointment = {
 			...state.appointments[id],
 			interview: { ...interview },
@@ -80,14 +88,14 @@ export default function useApplicationData(props) {
 			[id]: appointment,
 		};
 		dispatch({ type: SET_INTERVIEW, interview });
-		updateSpots(state.day, state.days, "book");
-
+		// dispatch({ type: ADD, value: 1 });
+		updateSpots(state.day, state.days, ADD);
 		return axios
 			.put(`/api/appointments/${id}`, appointment)
-			.then(() => dispatch({ type: SET_INTERVIEW, appointments }));
+			.then(() => dispatch({ type: SET_APPOINTMENTS, appointments }));
 	};
 
-	const cancelInterview = id => {
+	const cancelInterview = (id, interview) => {
 		const appointment = {
 			...state.appointments[id],
 			interview: null,
@@ -96,11 +104,13 @@ export default function useApplicationData(props) {
 			...state.appointments,
 			[id]: appointment,
 		};
-		dispatch({ type: SET_INTERVIEW, id, interview: null });
-		updateSpots(state.day, state.days, "delete");
+		dispatch({ type: SET_INTERVIEW, interview: null });
+		updateSpots(state.day, state.days, SUBTRACT);
+		// console.log(state.day, state.days,);
+		// dispatch({ type: SUBTRACT, value: 1 });
 		return axios
 			.delete(`/api/appointments/${id}`, appointment)
-			.then(() => dispatch({ type: SET_INTERVIEW, appointments }));
+			.then(() => dispatch({ type: SET_APPOINTMENTS, appointments }));
 	};
 
 	return { state, setDay, bookInterview, cancelInterview };
