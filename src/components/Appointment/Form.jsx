@@ -9,18 +9,26 @@ export default function Form(props) {
 	console.log("Form:", props);
 	const [name, setName] = useState(props.name || "");
 	const [interviewer, setInterviewer] = useState(props.interviewer || null);
+	const [error, setError] = useState("");
 
-	// const reset = () => {
-	// 	setName("");
-	// 	setInterviewer(null);
-	// };
-
-	// const cancel = () => {
-	// 	props.reset();
-	// };
-
-	const save = () => {
+	function validate() {
+		if (name === "") {
+			setError("Student name cannot be blank");
+			return;
+		}
+		setError("");
 		props.onSave(name, interviewer);
+	}
+
+	const reset = () => {
+		setName("");
+		setInterviewer(null);
+	};
+
+	// Action performed upon clicking 'Cancel' button
+	const cancel = () => {
+		reset();
+		props.onCancel();
 	};
 
 	return (
@@ -29,14 +37,18 @@ export default function Form(props) {
 				<form onSubmit={event => event.preventDefault()} autoComplete="off">
 					<input
 						className="appointment__create-input text--semi-bold"
+						name="name"
+						type="text"
 						value={name}
 						onChange={event => setName(event.target.value)}
-						placeholder={props.placeholder}
+						placeholder="Enter Student Name"
+						data-testid="student-name-input"
 						/*
           This must be a controlled component
         */
 					/>
 				</form>
+				<section className="appointment__validation">{error}</section>
 				<InterviewerList
 					interviewers={props.interviewers}
 					value={interviewer}
@@ -47,10 +59,10 @@ export default function Form(props) {
 			</section>
 			<section className="appointment__card-right">
 				<section className="appointment__actions">
-					<Button danger onClick={props.onCancel}>
+					<Button danger onClick={cancel}>
 						Cancel
 					</Button>
-					<Button confirm onClick={save}>
+					<Button confirm onClick={validate}>
 						Save
 					</Button>
 				</section>

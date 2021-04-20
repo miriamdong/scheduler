@@ -6,11 +6,6 @@ export default function InterviewerListItem(props) {
 		props.selected ? "interviewers__item--selected" : ""
 	}`;
 
-	// const [appointment, setAppointment] = useState(0);
-	// const clickHandler = () => {
-	//   setAppointment(appointment+1)
-	// }
-
 	return (
 		<li
 			className={interviewerClass}

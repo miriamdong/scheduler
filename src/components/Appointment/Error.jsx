@@ -12,7 +12,7 @@ export default function Header(props) {
 				className="appointment__error-close"
 				src="images/close.png"
 				alt="Close"
-				onClick={props.onClose}
+				onClick={props.back}
 			/>
 		</main>
 	);

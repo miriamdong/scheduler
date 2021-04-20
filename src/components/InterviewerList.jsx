@@ -21,7 +21,7 @@ export default function InterviewerList(props) {
 		);
 	});
 
-	console.log("interviewers: ", props.interviewers);
+	// console.log("interviewers: ", props.interviewers);
 
 	return (
 		<section className="interviewers">

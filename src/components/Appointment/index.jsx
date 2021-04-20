@@ -23,17 +23,18 @@ export default function Appointment(props) {
 		props.interview ? SHOW : EMPTY
 	);
 
+	console.log(props.interview);
 	const save = (name, interviewer) => {
 		if (!interviewer) return;
 		const interview = {
 			student: name,
 			interviewer,
 		};
-		// console.log("interview:", interview);
+		console.log("interview:", interview);
 		transition(SAVING);
 		props
 			.bookInterview(props.id, interview)
-			.then(() => transition(SHOW))
+			// .then(() => transition(SHOW))
 			.catch(error => transition(ERROR_SAVE, true));
 	};
 
@@ -42,9 +43,17 @@ export default function Appointment(props) {
 		transition(DELETING, true);
 		props
 			.cancelInterview(props.id, props.interview)
-			.then(() => transition(EMPTY))
+			// .then(() => transition(EMPTY))
 			.catch(error => transition(ERROR_DELETE, true));
 	};
+
+	useEffect(() => {
+		if (props.interview) {
+			transition(SHOW);
+		} else {
+			transition(EMPTY);
+		}
+	}, [props.interview]);
 
 	useEffect(() => {
 		const interview = props.interview;
@@ -100,9 +109,9 @@ export default function Appointment(props) {
 					/>
 				)}
 				{mode === ERROR_DELETE && (
-					<Error message="Error Deleting" onClick={back} />
+					<Error message="Error Deleting" back={back} />
 				)}
-				{mode === ERROR_SAVE && <Error message="Error Saving" onClick={back} />}
+				{mode === ERROR_SAVE && <Error message="Error Saving" back={back} />}
 			</main>
 		</>
 	);

@@ -1,6 +1,7 @@
 import "components/Application.scss";
 import DayList from "../components/DayList.js";
 import React from "react";
+import Header from "../components/Appointment/Header";
 import Appointment from "../components/Appointment";
 import {
 	getAppointmentsForDay,
@@ -15,21 +16,22 @@ export default function Application(props) {
 
 	const interviewers = getInterviewersForDay(state, state.day);
 	// Get daily appointments with data
-	const appointments = getAppointmentsForDay(state, state.day).map(
-		appointment => {
-			return (
-				<Appointment
-					key={appointment.id}
-					{...appointment}
-					interview={getInterview(state, appointment.interview)}
-					interviewers={interviewers}
-					bookInterview={bookInterview}
-					cancelInterview={cancelInterview}
-				/>
-			);
-		}
-	);
-	console.log("dailyAppointments: ", appointments);
+	const appForTheDay = getAppointmentsForDay(state, state.day);
+	const appointments = appForTheDay.map((appointment, index) => {
+		return (
+			<Appointment
+				key={index}
+				{...appointment}
+				interview={
+					appointment ? getInterview(state, appointment.interview) : null
+				}
+				interviewers={interviewers}
+				bookInterview={bookInterview}
+				cancelInterview={cancelInterview}
+			/>
+		);
+	});
+	// console.log("dailyAppointments: ", appointments);
 	return (
 		<main className="layout">
 			<section className="sidebar">
@@ -40,7 +42,12 @@ export default function Application(props) {
 				/>
 				<hr className="sidebar__separator sidebar--centered" />
 				<nav className="sidebar__menu">
-					<DayList days={state.days} day={state.day} setDay={setDay} />
+					<DayList
+						days={state.days}
+						day={state.day}
+						setDay={setDay}
+						state={state}
+					/>
 				</nav>
 				<img
 					className="sidebar__lhl sidebar--centered"
@@ -49,10 +56,8 @@ export default function Application(props) {
 				/>
 			</section>
 			<section className="schedule">
-				<section className="schedule">
-					{appointments}
-					<Appointment key="last" time="5pm" />
-				</section>
+				{appointments}
+				<Header id={999} className="appointment:last-of-type" time={"5pm"} />
 			</section>
 		</main>
 	);
