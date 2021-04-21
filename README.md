@@ -10,7 +10,9 @@ Install dependencies with `npm install`.
 
 ## Screenshots
 
-Creating and Deleting Interview Appointments:
+![Creating Interview Appointments:](https://github.com/miriamdong/scheduler/blob/master/Doc/screencapture-localhost-8000-2021-04-21-14_19_45.png?raw=true)
+
+![Edit Interview Appointments:](https://github.com/miriamdong/scheduler/blob/master/Doc/screencapture-localhost-8000-2021-04-21-14_20_29.png?raw=true)
 
 ## Running Webpack Development Server
 
