@@ -108,9 +108,11 @@ export default function Appointment(props) {
 						/>
 					)}
 					{mode === ERROR_DELETE && (
-						<Error message="Error Deleting" back={back} />
+						<Error message="There was an Error when Deleting :(" back={back} />
 					)}
-					{mode === ERROR_SAVE && <Error message="Error Saving" back={back} />}
+					{mode === ERROR_SAVE && (
+						<Error message="There was an Error when Saving :(" back={back} />
+					)}
 				</main>
 			</article>
 		</>

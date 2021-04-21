@@ -5,7 +5,6 @@ import InterviewerListItem from "./InterviewerListItem";
 import PropTypes from "prop-types";
 
 export default function InterviewerList(props) {
-	console.log(props);
 	const interviewers = props.interviewers.map(interviewer => {
 		return (
 			<InterviewerListItem
@@ -20,8 +19,6 @@ export default function InterviewerList(props) {
 			/>
 		);
 	});
-
-	// console.log("interviewers: ", props.interviewers);
 
 	return (
 		<section className="interviewers">
