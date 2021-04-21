@@ -68,7 +68,7 @@ export default function Appointment(props) {
 
 	return (
 		<>
-			<article class="appointment" data-testid="appointment">
+			<article className="appointment" data-testid="appointment">
 				<Header
 					id={props.id}
 					className="appointment:last-of-type"
