@@ -1,12 +1,7 @@
 import axios from "axios";
 import { useReducer, useEffect } from "react";
-// import { createStore } from "redux";
-import reducers, {
-	SET_DAY,
-	SET_APPLICATION_DATA,
-	SET_INTERVIEW,
-} from "./reducers";
-// import useSocket from "hooks/useSocket";
+import reducers, { SET_DAY, SET_APPLICATION_DATA } from "./reducers";
+import useSocket from "hooks/useSocket";
 
 export default function useApplicationData(props) {
 	// console.log("useApplicationData:", props);
@@ -20,7 +15,6 @@ export default function useApplicationData(props) {
 	const [state, dispatch] = useReducer(reducers, initState);
 
 	// fetch the inital data
-
 	useEffect(() => {
 		Promise.all([
 			axios.get("/api/days"),
@@ -36,35 +30,11 @@ export default function useApplicationData(props) {
 		});
 	}, []);
 
-	useEffect(() => {
-		const socket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-		socket.onopen = () => {
-			// console.log("Connected");
-			socket.send(JSON.stringify("ping"));
-		};
-
-		socket.onmessage = function (event) {
-			// console.log(`Message Received: ${event.data}`);
-			const data = JSON.parse(event.data);
-			console.log("event:::", JSON.parse(event.data));
-			// console.log(`Message:${eventData.type}`);
-
-			if (typeof data === "object" && data.type === SET_INTERVIEW) {
-				// dispatch({ type: SET_INTERVIEW, event: event.interview });
-				// console.log("here");
-				dispatch(data);
-			}
-		};
-
-		return () => {
-			socket.close();
-		};
-	}, [dispatch]);
+	useSocket(dispatch);
 
 	const setDay = day => dispatch({ type: SET_DAY, value: day });
 
 	const bookInterview = (id, interview) => {
-		// console.log("id, interview: ", id, interview);
 		const appointment = {
 			...state.appointments[id],
 			interview: { ...interview },
@@ -83,5 +53,6 @@ export default function useApplicationData(props) {
 		return axios.delete(`/api/appointments/${id}`, appointment);
 		// .then(() => dispatch({ type: SET_APPOINTMENTS, appointments }));
 	};
+
 	return { state, setDay, bookInterview, cancelInterview };
 }

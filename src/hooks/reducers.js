@@ -1,9 +1,20 @@
 export const SET_DAY = "SET_DAY";
 export const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 export const SET_INTERVIEW = "SET_INTERVIEW";
-export const SET_APPOINTMENTS = "SET_APPOINTMENTS";
-export const ADD = "ADD";
-export const SUBTRACT = "SUBTRACT";
+
+const updateSpots = (dayName, days, appointments) => {
+	const spots = days.find(a => a.name === dayName).appointments;
+
+	const leSpotsRemaining = spots.reduce((accu, curr) => {
+		return appointments[curr].interview ? accu : (accu = accu + 1);
+	}, 0);
+
+	let newDays = days.map(day =>
+		dayName === day.name ? { ...day, spots: leSpotsRemaining } : day
+	);
+
+	return newDays;
+};
 
 export default function reducers(state, action) {
 	switch (action.type) {
@@ -20,29 +31,22 @@ export default function reducers(state, action) {
 			};
 		}
 		case SET_INTERVIEW: {
-			// console.log("interview-action:", action.interview);
-			// const appointments = state.appointments.map(app => {
-			// 	return app.id === action.interview.id ? action.interview : app;
-			// });
-			return {
-				...state,
-				appointments: {
-					...state.appointments,
-					[action.id]: {
-						...state.appointments[action.id],
-						interview: action.interview,
-					},
+			const appointments = {
+				...state.appointments,
+				[action.id]: {
+					...state.appointments[action.id],
+					interview: action.interview,
 				},
 			};
-		}
 
-		// case ADD: {
-		// 	// console.log("state, action.value: ", state, action);
-		// 	return { ...state, spots: action.day.spots + action.value };
-		// }
-		// case SUBTRACT: {
-		// 	return { ...state, spots: action.day.spots - action.value };
-		// }
+			const days = updateSpots(state.day, state.days, appointments);
+
+			return {
+				...state,
+				appointments,
+				days,
+			};
+		}
 
 		default:
 			throw new Error(

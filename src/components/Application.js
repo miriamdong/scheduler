@@ -57,7 +57,8 @@ export default function Application(props) {
 			</section>
 			<section className="schedule">
 				{appointments}
-				<Header id={999} className="appointment:last-of-type" time={"5pm"} />
+				<Appointment key="last" time="5pm" />
+				{/* <Header id={999} className="appointment:last-of-type" time={"5pm"} /> */}
 			</section>
 		</main>
 	);
