@@ -1,7 +1,6 @@
 import "components/Application.scss";
 import DayList from "../components/DayList.js";
 import React from "react";
-import Header from "../components/Appointment/Header";
 import Appointment from "../components/Appointment";
 import {
 	getAppointmentsForDay,
@@ -58,7 +57,6 @@ export default function Application(props) {
 			<section className="schedule">
 				{appointments}
 				<Appointment key="last" time="5pm" />
-				{/* <Header id={999} className="appointment:last-of-type" time={"5pm"} /> */}
 			</section>
 		</main>
 	);
