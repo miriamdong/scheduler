@@ -9,7 +9,7 @@ import Error from "components/Appointment/Error";
 import Form from "components/Appointment/Form";
 
 export default function Appointment(props) {
-	console.log("index-Appointment:", props);
+	// console.log("index-Appointment:", props);
 	const EMPTY = "EMPTY";
 	const SHOW = "SHOW";
 	const CREATE = "CREATE";
@@ -23,14 +23,13 @@ export default function Appointment(props) {
 		props.interview ? SHOW : EMPTY
 	);
 
-	console.log(props.interview);
 	const save = (name, interviewer) => {
 		if (!interviewer) return;
 		const interview = {
 			student: name,
 			interviewer,
 		};
-		console.log("interview:", interview);
+		// console.log("interview:", interview);
 		transition(SAVING);
 		props
 			.bookInterview(props.id, interview)
@@ -39,7 +38,6 @@ export default function Appointment(props) {
 	};
 
 	const deleteInterview = event => {
-		console.log("event:", event);
 		transition(DELETING, true);
 		props
 			.cancelInterview(props.id, props.interview)
@@ -57,7 +55,7 @@ export default function Appointment(props) {
 
 	useEffect(() => {
 		const interview = props.interview;
-		console.log(interview);
+
 		if (interview && mode === EMPTY) {
 			transition(SHOW);
 		}
