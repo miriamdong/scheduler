@@ -8,12 +8,14 @@ import {
 	getInterviewersForDay,
 } from "../helpers/selectors";
 import useApplicationData from "hooks/useApplicationData.js";
+import Nav from "components/Auth/Nav";
 
 export default function Application(props) {
 	const data = useApplicationData();
 	const { state, setDay, bookInterview, cancelInterview } = data;
 
 	const interviewers = getInterviewersForDay(state, state.day);
+
 	// Get daily appointments with data
 	const appForTheDay = getAppointmentsForDay(state, state.day);
 	const appointments = appForTheDay.map((appointment, index) => {
@@ -30,9 +32,13 @@ export default function Application(props) {
 			/>
 		);
 	});
-	// console.log("dailyAppointments: ", appointments);
 	return (
 		<main className="layout">
+			<section className="header">
+				<React.StrictMode>
+					<Nav />
+				</React.StrictMode>
+			</section>
 			<section className="sidebar">
 				<img
 					className="sidebar--centered"
