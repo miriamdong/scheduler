@@ -17,6 +17,7 @@ import Application from "components/Application";
 
 afterEach(cleanup);
 // jest.mock("axios");
+jest.mock("components/Auth/Nav", () => () => <div>Mock Nav</div>);
 
 describe("Application", () => {
 	// TEST NUMBER ONE
