@@ -37,13 +37,15 @@ npm run storybook
 - React: 16.9.0
 - Webpack, Babel
 - Axios, WebSockets
+- Firebase
 
 ## Dependencies
 
 - classnames
 - Normalize.css
 - react-dom, react-scripts
-- Storybook, Webpack Dev Server, Jest, Testing Library
+- Storybook, Webpack Dev Server, Jest, Testing Library, Cypress
+- Firebase for User authentication
 
 The Scheduler client application created using Create React App. Express is the basis for the Scheduler API server application.
 
@@ -55,6 +57,10 @@ Both servers run concurrently; requests are proxied from the Webpack development
 
 The client application communicates with a WebSocket server.
 When a user books or cancels an interview, all connected users see the update in their browser.
+
+### Firebase
+
+Email address & password-based authentication
 
 ## Features
 
