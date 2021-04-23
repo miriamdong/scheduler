@@ -9,7 +9,6 @@ import Error from "components/Appointment/Error";
 import Form from "components/Appointment/Form";
 
 export default function Appointment(props) {
-	// console.log("index-Appointment:", props);
 	const EMPTY = "EMPTY";
 	const SHOW = "SHOW";
 	const CREATE = "CREATE";
@@ -29,11 +28,9 @@ export default function Appointment(props) {
 			student: name,
 			interviewer,
 		};
-		// console.log("interview:", interview);
 		transition(SAVING);
 		props
 			.bookInterview(props.id, interview)
-			// .then(() => transition(SHOW))
 			.catch(error => transition(ERROR_SAVE, true));
 	};
 
@@ -41,7 +38,6 @@ export default function Appointment(props) {
 		transition(DELETING, true);
 		props
 			.cancelInterview(props.id, props.interview)
-			// .then(() => transition(EMPTY))
 			.catch(error => transition(ERROR_DELETE, true));
 	};
 

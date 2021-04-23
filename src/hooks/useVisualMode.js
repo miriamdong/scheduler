@@ -25,7 +25,6 @@ const useVisualMode = initial => {
 
 			const newHistory = history.slice(0, -1);
 			setMode(newHistory[newHistory.length - 1]);
-			// console.log(mode);
 			return newHistory;
 		});
 	};

@@ -22,7 +22,6 @@ export default function reducers(state, action) {
 			return { ...state, day: action.value };
 		}
 		case SET_APPLICATION_DATA: {
-			// console.log("action:", action);
 			return {
 				...state,
 				days: action.days.data,

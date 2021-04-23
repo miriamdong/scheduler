@@ -41,7 +41,6 @@ export default function useApplicationData(props) {
 		};
 
 		return axios.put(`/api/appointments/${id}`, appointment);
-		// .then(() => dispatch({ type: SET_APPOINTMENTS, appointments }));
 	};
 
 	const cancelInterview = id => {
@@ -51,7 +50,6 @@ export default function useApplicationData(props) {
 		};
 
 		return axios.delete(`/api/appointments/${id}`, appointment);
-		// .then(() => dispatch({ type: SET_APPOINTMENTS, appointments }));
 	};
 
 	return { state, setDay, bookInterview, cancelInterview };

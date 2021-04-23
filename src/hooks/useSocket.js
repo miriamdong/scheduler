@@ -10,12 +10,8 @@ export default function useSocket(dispatch) {
 
 		socket.onmessage = function (event) {
 			const data = JSON.parse(event.data);
-			// console.log("event:::", JSON.parse(event.data));
-			// console.log(`Message:${eventData.type}`);
 
 			if (typeof data === "object" && data.type === SET_INTERVIEW) {
-				// dispatch({ type: SET_INTERVIEW, event: event.interview });
-				// console.log("here", data);
 				dispatch(data);
 			}
 		};
